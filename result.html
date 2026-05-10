@@ -167,42 +167,68 @@ function getParams() {
   };
 }
 
-function render() {
-  const { maxAxis, scores } = getParams();
-  const t = TYPE_DATA[maxAxis] || TYPE_DATA['H'];
-
+function renderSingleType(t, scores) {
   document.getElementById('shareCard').style.background = t.color;
   document.getElementById('cardName').textContent = t.name;
   document.getElementById('cardPosture').textContent = '核心姿態：' + t.posture;
   document.getElementById('cardPractice').textContent = t.practice;
-
-  const tagsEl = document.getElementById('cardTags');
-  tagsEl.innerHTML = t.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-
+  document.getElementById('cardTags').innerHTML = t.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
   const badge = document.getElementById('detailBadge');
-  badge.textContent = t.id;
-  badge.style.background = t.light;
-  badge.style.color = t.color;
-
+  badge.textContent = t.id; badge.style.background = t.light; badge.style.color = t.color;
   document.getElementById('detailTitle').textContent = t.name;
   document.getElementById('detailSub').textContent = t.group + '大類 · 向度 ' + t.id;
   document.getElementById('detailTrait').textContent = t.trait;
   document.getElementById('detailReact').textContent = t.react;
   document.getElementById('detailNeed').textContent = t.need;
-
   const maxScore = Math.max(...scores);
-  const bars = document.getElementById('barRows');
-  bars.innerHTML = scores.map((s, i) => {
+  document.getElementById('barRows').innerHTML = scores.map((s, i) => {
     const isHl = s === maxScore;
     const pct = Math.round((s / 15) * 100);
     const fillColor = isHl ? t.color : (s >= 10 ? '#b5d4f4' : '#d3d1c7');
-    return `
-      <div class="bar-row">
-        <div class="bar-label${isHl?' hl':''}">${AXES[i]}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
-        <div class="bar-num${isHl?' hl':''}" style="${isHl?'color:'+t.color:''}">${s}</div>
-      </div>`;
+    return `<div class="bar-row">
+      <div class="bar-label${isHl?' hl':''}">${AXES[i]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+      <div class="bar-num${isHl?' hl':''}" style="${isHl?'color:'+t.color:''}">${s}</div>
+    </div>`;
   }).join('');
+}
+
+function renderDualType(t1, t2, scores) {
+  // 分享卡：漸層兩色
+  document.getElementById('shareCard').style.background = `linear-gradient(135deg, ${t1.color} 0%, ${t2.color} 100%)`;
+  document.getElementById('cardName').textContent = t1.name + ' × ' + t2.name;
+  document.getElementById('cardPosture').textContent = '指責大類中的雙重傾向';
+  document.getElementById('cardPractice').textContent = '「我注意到自己同時有這兩種模式。」';
+  document.getElementById('cardTags').innerHTML = [...t1.tags, ...t2.tags].slice(0,4).map(tag => `<span class="tag">${tag}</span>`).join('');
+
+  const badge = document.getElementById('detailBadge');
+  badge.textContent = 'C'; badge.style.background = t1.light; badge.style.color = t1.color;
+  document.getElementById('detailTitle').textContent = '威權的指責 × 護顏的指責';
+  document.getElementById('detailSub').textContent = '指責大類 · 兩種傾向同分並列';
+  document.getElementById('detailTrait').textContent = t1.trait + '　同時，' + t2.trait;
+  document.getElementById('detailReact').textContent = t1.react;
+  document.getElementById('detailNeed').textContent = t2.need;
+
+  const maxScore = Math.max(...scores);
+  document.getElementById('barRows').innerHTML = scores.map((s, i) => {
+    const isHl = s === maxScore;
+    const pct = Math.round((s / 15) * 100);
+    const fillColor = isHl ? t1.color : (s >= 10 ? '#b5d4f4' : '#d3d1c7');
+    return `<div class="bar-row">
+      <div class="bar-label${isHl?' hl':''}">${AXES[i]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+      <div class="bar-num${isHl?' hl':''}" style="${isHl?'color:'+t1.color:''}">${s}</div>
+    </div>`;
+  }).join('');
+}
+
+function render() {
+  const { maxAxis, scores } = getParams();
+  if (maxAxis === 'C1+C2') {
+    renderDualType(TYPE_DATA['C1'], TYPE_DATA['C2'], scores);
+  } else {
+    renderSingleType(TYPE_DATA[maxAxis] || TYPE_DATA['H'], scores);
+  }
 }
 
 render();

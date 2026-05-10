@@ -449,7 +449,7 @@ function submitQuiz() {
 
   // C 拆分: Q12 (idx=11) vs Q21 (idx=20), both are axis C
   const q12 = answers[11]; const q21 = answers[20];
-  let cType = q12 > q21 ? 'C1' : (q21 > q12 ? 'C2' : 'C');
+  let cType = q12 > q21 ? 'C1' : (q21 > q12 ? 'C2' : 'C1+C2');
 
   // 找主類型
   const axisKeys = ['A','B','C','D','E','F','G','H','I'];
