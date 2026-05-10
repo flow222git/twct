@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>練息場 · 10 種溝通類型</title>
+<style>
+:root {
+  --blue: #2b7de9; --blue-dark: #1a5fc7; --blue-light: #e8f1fd;
+  --text: #1d1d1f; --text2: #6e6e73; --text3: #aeaeb2;
+  --bg: #ffffff; --bg2: #f5f5f7; --border: rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Noto Sans TC', 'Helvetica Neue', sans-serif; background: var(--bg2); -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.88); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-mark { display: flex; align-items: center; gap: 10px; }
+.logo-box { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); color: white; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+.logo-sub { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; }
+.nav-cta { font-size: 13px; font-weight: 600; color: white; background: var(--blue); border: none; border-radius: 100px; padding: 8px 18px; cursor: pointer; text-decoration: none; }
+.nav-cta:hover { background: var(--blue-dark); }
+
+/* HERO */
+.hero {
+  background: var(--blue); color: white;
+  padding: 120px 32px 72px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before { content:''; position:absolute; top:-80px; right:-80px; width:300px; height:300px; border-radius:50%; background:rgba(255,255,255,0.07); }
+.hero::after { content:''; position:absolute; bottom:-50px; left:-50px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.04); }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; opacity: 0.6; text-transform: uppercase; margin-bottom: 16px; }
+.hero-title { font-size: clamp(32px, 5vw, 52px); font-weight: 700; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
+.hero-desc { font-size: 15px; opacity: 0.8; line-height: 1.7; max-width: 480px; margin: 0 auto 36px; }
+
+/* FAMILY TABS */
+.family-tabs {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  max-width: 640px; margin: 0 auto;
+}
+.family-tab {
+  font-size: 13px; font-weight: 600; padding: 8px 20px;
+  border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent; color: rgba(255,255,255,0.75);
+  cursor: pointer; transition: all 0.2s;
+}
+.family-tab:hover { border-color: rgba(255,255,255,0.7); color: white; }
+.family-tab.active { background: white; color: var(--blue); border-color: white; }
+
+/* BUBBLE VIZ */
+.bubble-section {
+  background: white; padding: 48px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.bubble-wrap {
+  max-width: 560px; margin: 0 auto; position: relative; height: 280px;
+}
+.bubble-group {
+  position: absolute; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 4px; cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.bubble-group:hover { transform: scale(1.06); }
+.bubble-group-label { font-size: 13px; font-weight: 700; color: white; letter-spacing: -0.3px; }
+.bubble-group-sub { font-size: 10px; color: rgba(255,255,255,0.75); }
+.bubble-count { font-size: 22px; font-weight: 800; color: white; letter-spacing: -1px; }
+
+/* MAIN CONTENT */
+.main { max-width: 720px; margin: 0 auto; padding: 48px 20px 72px; }
+
+/* FILTER ROW */
+.filter-row {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px;
+  align-items: center;
+}
+.filter-label { font-size: 12px; color: var(--text3); margin-right: 4px; }
+.filter-btn {
+  font-size: 12px; font-weight: 600; padding: 6px 16px;
+  border-radius: 100px; border: 1.5px solid var(--border);
+  background: white; color: var(--text2); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+.filter-btn.active { color: white; border-color: transparent; }
+
+/* TYPE GRID */
+.type-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+/* TYPE CARD */
+.type-card {
+  background: white; border-radius: 20px;
+  border: 1px solid var(--border); overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.type-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.09); }
+.type-card.hidden { display: none; }
+
+.card-header {
+  padding: 22px 22px 18px; color: white;
+  position: relative; overflow: hidden;
+}
+.card-header::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.1); }
+.card-header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.card-axis-badge {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800;
+}
+.card-group-pill { font-size: 10px; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 100px; font-weight: 600; letter-spacing: 0.04em; }
+.card-name { font-size: 20px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.2; margin-bottom: 6px; }
+.card-posture { font-size: 12px; opacity: 0.82; line-height: 1.5; }
+
+.card-body { padding: 18px 22px 20px; }
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.card-tag { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: var(--bg2); color: var(--text2); font-weight: 500; }
+
+.card-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.card-row-label { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+.card-row-value { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+.card-practice {
+  border-radius: 10px; padding: 12px 14px;
+}
+.practice-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px; opacity: 0.65; }
+.practice-text { font-size: 13px; font-weight: 600; line-height: 1.5; }
+
+/* CTA SECTION */
+.cta-section {
+  background: var(--blue); border-radius: 24px;
+  padding: 40px 32px; text-align: center; margin-top: 48px; color: white;
+}
+.cta-title { font-size: 24px; font-weight: 700; letter-spacing: -1px; margin-bottom: 10px; }
+.cta-sub { font-size: 14px; opacity: 0.82; margin-bottom: 24px; line-height: 1.6; }
+.cta-btn { display: inline-block; background: white; color: var(--blue); font-size: 15px; font-weight: 700; padding: 14px 36px; border-radius: 100px; text-decoration: none; transition: all 0.2s; }
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+footer { text-align: center; padding: 32px 20px; }
+.footer-text { font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-mark">
+    <div class="logo-box">練</div>
+    <div>
+      <div class="logo-text">練息場</div>
+      <div class="logo-sub">JOIN TO ENJOY</div>
+    </div>
+  </div>
+  <a href="index.html" class="nav-cta">去測驗</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">練息場 · 薩提爾溝通類型</div>
+  <h1 class="hero-title">10 種溝通類型</h1>
+  <p class="hero-desc">每種類型都有它的智慧，也有它的盲點。<br>看看自己在哪裡，再看看還能走向哪裡。</p>
+  <div class="family-tabs">
+    <button class="family-tab active" onclick="filterGroup('all', this)">全部 10 種</button>
+    <button class="family-tab" onclick="filterGroup('討好', this)">討好</button>
+    <button class="family-tab" onclick="filterGroup('指責', this)">指責</button>
+    <button class="family-tab" onclick="filterGroup('超理智', this)">超理智</button>
+    <button class="family-tab" onclick="filterGroup('打岔', this)">打岔</button>
+    <button class="family-tab" onclick="filterGroup('一致', this)">一致</button>
+  </div>
+</div>
+
+<!-- BUBBLE VIZ -->
+<div class="bubble-section">
+  <div class="bubble-wrap" id="bubbleWrap"></div>
+</div>
+
+<div class="main">
+  <div class="type-grid" id="typeGrid"></div>
+
+  <div class="cta-section">
+    <div class="cta-title">你是哪一種？</div>
+    <div class="cta-sub">做完測驗才知道你真正的主要類型，<br>很多人做完都會有點驚訝。</div>
+    <a href="index.html" class="cta-btn">開始測驗 →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 練息場 Join to Enjoy · 題目改編自薩提爾溝通模式研究</div>
+</footer>
+
+<script>
+const TYPES = [
+  { id:'A',  name:'弱勢的討好',       group:'討好',  color:'#c96090', light:'#fdeef6', axis:'A',
+    posture:'壓力一來，先把自己縮小',
+    tags:['先讓步先道歉','感受往後放','縮小自己'],
+    trait:'先讓步、先道歉、先把自己縮小。',
+    react:'遇到壓力時，很快判斷對方想要什麼，然後把自己的感受往後放。',
+    need:'安全感，以及被允許慢慢說出自己的想法。',
+    practice:'「我想先想一下，再回答你。」' },
+  { id:'B',  name:'顧及關係的討好',   group:'討好',  color:'#a050b0', light:'#f5e8f7', axis:'B',
+    posture:'衝突一來，先替大家找台階下',
+    tags:['關係大於輸贏','找台階下','退讓被看見'],
+    trait:'重視和諧，常把關係放在輸贏前面。',
+    react:'衝突一出現，就會想緩和氣氛、替大家找台階下。',
+    need:'關係穩定，但也希望自己的退讓被看見。',
+    practice:'「我在乎我們的關係，也想補充我的感受。」' },
+  { id:'C1', name:'威權的指責',        group:'指責',  color:'#c84528', light:'#faece7', axis:'C',
+    posture:'不安時，用強勢語氣把現場拉回節奏',
+    tags:['快速決定','直接要求','掌控節奏'],
+    trait:'快速決定、直接要求，希望事情照規則推進。',
+    react:'不安或混亂時，容易用強勢語氣把現場拉回自己的節奏。',
+    need:'掌控感，以及確認自己仍然有影響力。',
+    practice:'「我現在有點急，我先說我的期待。」' },
+  { id:'C2', name:'護顏的指責',        group:'指責',  color:'#b06018', light:'#faeeda', axis:'C',
+    posture:'被質疑時，先把焦點轉向對方',
+    tags:['怕被看輕','先反擊','保有自尊'],
+    trait:'很怕被看輕，受傷時容易先反擊。',
+    react:'一感覺被質疑，就會把焦點轉到對方哪裡不對。',
+    need:'被尊重，以及保有自尊的空間。',
+    practice:'「這件事讓我有點被否定的感覺。」' },
+  { id:'D',  name:'唯理至上的超理智', group:'超理智', color:'#1e5ec0', light:'#e6f1fb', axis:'D',
+    posture:'先看邏輯規則，把情緒降到最低',
+    tags:['邏輯效率優先','情緒降最低','立刻找解法'],
+    trait:'先看邏輯、規則、效率，習慣把情緒降到最低。',
+    react:'別人有情緒時，會想立刻分析問題、找解法。',
+    need:'清楚與秩序，也需要學著讓感受有位置。',
+    practice:'「我先理解你的感受，再一起看怎麼處理。」' },
+  { id:'E',  name:'證明自己的超理智', group:'超理智', color:'#4060b0', light:'#eaf0f9', axis:'E',
+    posture:'不被理解時，補充更多資料來說明',
+    tags:['努力說明能力','補充更多論點','需要被肯定'],
+    trait:'努力說明自己懂、自己有能力、自己是有道理的。',
+    react:'感到不被理解時，會補充更多資料、論點或證明。',
+    need:'被肯定，不必一直證明才值得被聽見。',
+    practice:'「我想被理解的不只是觀點，也包含我的用心。」' },
+  { id:'F',  name:'逃避的打岔',       group:'打岔',  color:'#2e8848', light:'#eaf3de', axis:'F',
+    posture:'衝突逼近，身心先切到保護模式',
+    tags:['沉默放空','保護模式','遠離現場'],
+    trait:'壓力太高時，會沉默、放空、消失或轉移話題。',
+    react:'衝突逼近時，身心會先切到保護模式，讓自己遠離現場。',
+    need:'暫停、喘息，以及可以安全回來的時間。',
+    practice:'「我需要休息一下，晚點再回來談。」' },
+  { id:'G',  name:'事緩則圓的打岔',   group:'打岔',  color:'#1e8870', light:'#e1f5ee', axis:'G',
+    posture:'氣氛緊張時，先用幽默讓場面不爆',
+    tags:['幽默轉場','緩衝降溫','彈性優先'],
+    trait:'擅長緩衝、幽默、繞一下，先讓場面不要爆掉。',
+    react:'氣氛緊張時，會用玩笑或轉向其他話題來降溫。',
+    need:'保留彈性，也需要在降溫後回到重點。',
+    practice:'「我想先緩一下，但這件事我願意回來談。」' },
+  { id:'H',  name:'人我兼顧的一致',   group:'一致',  color:'#6040a0', light:'#eeedfe', axis:'H',
+    posture:'說出感受，也保留理解對方的空間',
+    tags:['同時照顧自他','表達清楚','真實連結'],
+    trait:'能同時照顧自己、對方和情境，表達相對清楚。',
+    react:'衝突時會試著說出自己的感受，也保留理解對方的空間。',
+    need:'真實連結，而不是表面和平。',
+    practice:'「我想說我的感受，也想聽聽你的版本。」' },
+  { id:'I',  name:'反求諸己的一致',   group:'一致',  color:'#305890', light:'#e6edf7', axis:'I',
+    posture:'不滿時，先想自己能多承擔一點',
+    tags:['先回看自己','願意調整','重視修復'],
+    trait:'習慣先回看自己，願意調整，也重視關係中的修復。',
+    react:'遇到不滿時，會先想自己能不能多理解、多承擔一點。',
+    need:'雙向負責，而不是只有自己一直修正。',
+    practice:'「我可以調整，也希望我們一起承擔。」' },
+];
+
+const GROUP_COLORS = { '討好':'#c96090', '指責':'#c84528', '超理智':'#1e5ec0', '打岔':'#1e8870', '一致':'#6040a0' };
+const GROUP_LIGHT  = { '討好':'#fdeef6', '指責':'#faece7', '超理智':'#e6f1fb', '打岔':'#e1f5ee', '一致':'#eeedfe' };
+
+// Build bubble viz
+function buildBubbles() {
+  const wrap = document.getElementById('bubbleWrap');
+  const groups = ['討好','指責','超理智','打岔','一致'];
+  const positions = [
+    { left:'6%',   top:'20%', w:130 },
+    { left:'24%',  top:'52%', w:118 },
+    { left:'44%',  top:'8%',  w:138 },
+    { left:'62%',  top:'44%', w:126 },
+    { left:'78%',  top:'15%', w:132 },
+  ];
+  const counts = { '討好':2, '指責':2, '超理智':2, '打岔':2, '一致':2 };
+  groups.forEach((g, i) => {
+    const pos = positions[i];
+    const el = document.createElement('div');
+    el.className = 'bubble-group';
+    el.style.cssText = `left:${pos.left};top:${pos.top};width:${pos.w}px;height:${pos.w}px;background:${GROUP_COLORS[g]};`;
+    el.innerHTML = `
+      <div class="bubble-count">${counts[g]}</div>
+      <div class="bubble-group-label">${g}</div>
+      <div class="bubble-group-sub">種類型</div>
+    `;
+    el.onclick = () => {
+      filterGroup(g, null);
+      document.querySelector('.main').scrollIntoView({ behavior:'smooth' });
+    };
+    wrap.appendChild(el);
+  });
+}
+
+// Build type cards
+function buildCards() {
+  const grid = document.getElementById('typeGrid');
+  TYPES.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'type-card';
+    card.dataset.group = t.group;
+    card.innerHTML = `
+      <div class="card-header" style="background:${t.color}">
+        <div class="card-header-top">
+          <div class="card-axis-badge">${t.axis}</div>
+          <div class="card-group-pill">${t.group}</div>
+        </div>
+        <div class="card-name">${t.name}</div>
+        <div class="card-posture">${t.posture}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          ${t.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
+        </div>
+        <div class="card-rows">
+          <div>
+            <div class="card-row-label">核心特質</div>
+            <div class="card-row-value">${t.trait}</div>
+          </div>
+          <div>
+            <div class="card-row-label">常見反應</div>
+            <div class="card-row-value">${t.react}</div>
+          </div>
+          <div>
+            <div class="card-row-label">內在需求</div>
+            <div class="card-row-value">${t.need}</div>
+          </div>
+        </div>
+        <div class="card-practice" style="background:${t.light}">
+          <div class="practice-eyebrow" style="color:${t.color}">可以練習說的一句話</div>
+          <div class="practice-text" style="color:${t.color}">${t.practice}</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function filterGroup(group, btn) {
+  document.querySelectorAll('.family-tab').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+  });
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    const tabs = document.querySelectorAll('.family-tab');
+    const labels = ['all','討好','指責','超理智','打岔','一致'];
+    tabs.forEach((tab, i) => { if (labels[i] === group) tab.classList.add('active'); });
+  }
+  document.querySelectorAll('.type-card').forEach(card => {
+    if (group === 'all' || card.dataset.group === group) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+buildBubbles();
+buildCards();
+</script>
+</body>
+</html>

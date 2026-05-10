@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>練息場 · 你的溝通類型結果</title>
+<style>
+:root {
+  --blue: #2b7de9; --blue-dark: #1a5fc7; --blue-light: #e8f1fd;
+  --text: #1d1d1f; --text2: #6e6e73; --text3: #aeaeb2;
+  --bg: #ffffff; --bg2: #f5f5f7; --border: rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Noto Sans TC', 'Helvetica Neue', sans-serif; background: var(--bg2); -webkit-font-smoothing: antialiased; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.88); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-mark { display: flex; align-items: center; gap: 10px; }
+.logo-box { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); color: white; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
+.logo-sub { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; }
+.nav-link { font-size: 13px; color: var(--text2); text-decoration: none; }
+.nav-link:hover { color: var(--blue); }
+
+.page { max-width: 480px; margin: 0 auto; padding: 96px 20px 60px; }
+
+/* SHARE CARD */
+.share-card {
+  width: 100%; border-radius: 24px;
+  padding: 28px 24px 24px; color: white;
+  position: relative; overflow: hidden; margin-bottom: 20px;
+}
+.share-card::before { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.08); }
+.share-card::after { content:''; position:absolute; bottom:-30px; left:-30px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,0.05); }
+.card-brand { font-size: 10px; letter-spacing: 0.14em; font-weight: 600; opacity: 0.62; margin-bottom: 18px; text-transform: uppercase; }
+.card-type-pill { font-size: 11px; background: rgba(255,255,255,0.18); display: inline-block; padding: 4px 13px; border-radius: 100px; margin-bottom: 10px; font-weight: 600; }
+.card-type-name { font-size: 34px; font-weight: 700; letter-spacing: -1.8px; line-height: 1.12; margin-bottom: 8px; }
+.card-posture { font-size: 13px; opacity: 0.82; margin-bottom: 20px; line-height: 1.55; }
+.card-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 20px; }
+.tag { font-size: 11px; padding: 4px 12px; border-radius: 100px; background: rgba(255,255,255,0.15); font-weight: 500; }
+.card-practice { background: rgba(255,255,255,0.13); border-radius: 12px; padding: 14px 16px; }
+.practice-eyebrow { font-size: 9px; opacity: 0.6; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.practice-text { font-size: 14px; font-weight: 600; line-height: 1.55; }
+
+/* HINT */
+.hint-row { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+.hint-text { font-size: 12px; color: var(--text3); }
+
+/* DETAIL CARD */
+.detail-card { background: white; border-radius: 20px; border: 1px solid var(--border); padding: 24px; margin-bottom: 16px; }
+.detail-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.type-badge { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; flex-shrink: 0; }
+.detail-title { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); }
+.detail-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+.detail-section { margin-bottom: 14px; }
+.detail-label { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.detail-value { font-size: 14px; color: var(--text2); line-height: 1.65; }
+
+/* SCORE BARS */
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.bar-label { font-size: 11px; color: var(--text2); width: 78px; flex-shrink: 0; }
+.bar-label.hl { font-weight: 700; color: var(--text); }
+.bar-track { flex: 1; height: 6px; background: var(--bg2); border-radius: 100px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
+.bar-num { font-size: 12px; font-weight: 600; color: var(--text2); width: 18px; text-align: right; }
+.bar-num.hl { font-weight: 800; }
+
+/* RETAKE */
+.retake-btn { display: block; width: 100%; padding: 14px; text-align: center; background: var(--bg2); border: 1px solid var(--border); border-radius: 100px; font-size: 14px; font-weight: 600; color: var(--text2); text-decoration: none; margin-top: 16px; transition: all 0.2s; }
+.retake-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+footer { text-align: center; padding: 32px 20px; }
+.footer-text { font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-mark">
+    <div class="logo-box">練</div>
+    <div>
+      <div class="logo-text">練息場</div>
+      <div class="logo-sub">JOIN TO ENJOY</div>
+    </div>
+  </div>
+  <a href="types.html" class="nav-link">10 種類型 →</a>
+</nav>
+
+<div class="page">
+  <div class="share-card" id="shareCard">
+    <div class="card-brand">練息場 Join to Enjoy · 溝通類型測驗</div>
+    <div class="card-type-pill" id="cardPill">你的溝通類型</div>
+    <div class="card-type-name" id="cardName">—</div>
+    <div class="card-posture" id="cardPosture">核心姿態：—</div>
+    <div class="card-tags" id="cardTags"></div>
+    <div class="card-practice">
+      <div class="practice-eyebrow">可以練習說的一句話</div>
+      <div class="practice-text" id="cardPractice">—</div>
+    </div>
+  </div>
+
+  <div class="hint-row">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+    <span class="hint-text">長按卡片可以截圖分享到 IG / LINE</span>
+  </div>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <div class="type-badge" id="detailBadge">?</div>
+      <div>
+        <div class="detail-title" id="detailTitle">—</div>
+        <div class="detail-sub" id="detailSub">—</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="detail-section">
+      <div class="detail-label">核心特質</div>
+      <div class="detail-value" id="detailTrait">—</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">常見反應</div>
+      <div class="detail-value" id="detailReact">—</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">內在需求</div>
+      <div class="detail-value" id="detailNeed">—</div>
+    </div>
+  </div>
+
+  <div class="detail-card">
+    <div class="detail-label" style="margin-bottom:16px">A–I 九向度原始分數</div>
+    <div id="barRows"></div>
+  </div>
+
+  <a href="index.html" class="retake-btn">重新測驗</a>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 練息場 Join to Enjoy · 題目改編自薩提爾溝通模式研究</div>
+</footer>
+
+<script>
+const TYPE_DATA = {
+  A:  { name:'弱勢的討好',     group:'討好', color:'#c96090', light:'#fbeaf0', id:'A', tags:['先讓步先道歉','感受往後放','縮小自己'], posture:'壓力一來，先把自己縮小', practice:'「我想先想一下，再回答你。」', trait:'先讓步、先道歉、先把自己縮小。', react:'遇到壓力時，很快判斷對方想要什麼，把自己的感受往後放。', need:'安全感，以及被允許慢慢說出自己的想法。' },
+  B:  { name:'顧及關係的討好', group:'討好', color:'#a05db0', light:'#f5e8f7', id:'B', tags:['關係大於輸贏','找台階下','退讓被看見'], posture:'衝突一來，先替大家緩和氣氛', practice:'「我在乎我們的關係，也想補充我的感受。」', trait:'重視和諧，常把關係放在輸贏前面。', react:'衝突一出現，就會想緩和氣氛、替大家找台階下。', need:'關係穩定，但也希望自己的退讓被看見。' },
+  C1: { name:'威權的指責',     group:'指責', color:'#c8452a', light:'#faece7', id:'C', tags:['快速決定','直接要求','掌控節奏'], posture:'不安時，用強勢語氣把現場拉回節奏', practice:'「我現在有點急，我先說我的期待。」', trait:'快速決定、直接要求，希望事情照規則推進。', react:'不安或混亂時，容易用強勢語氣把現場拉回自己的節奏。', need:'掌控感，以及確認自己仍然有影響力。' },
+  C2: { name:'護顏的指責',     group:'指責', color:'#b06020', light:'#faeeda', id:'C', tags:['怕被看輕','先反擊','保有自尊'], posture:'被質疑時，先把焦點轉向對方哪裡不對', practice:'「這件事讓我有點被否定的感覺。」', trait:'很怕被看輕，受傷時容易先反擊。', react:'一感覺被質疑，就會把焦點轉到對方哪裡不對。', need:'被尊重，以及保有自尊的空間。' },
+  D:  { name:'唯理至上的超理智', group:'超理智', color:'#2060c0', light:'#e6f1fb', id:'D', tags:['邏輯效率優先','情緒降最低','立刻找解法'], posture:'先看邏輯規則，習慣把情緒降到最低', practice:'「我先理解你的感受，再一起看怎麼處理。」', trait:'先看邏輯、規則、效率，習慣把情緒降到最低。', react:'別人有情緒時，會想立刻分析問題、找解法。', need:'清楚與秩序，也需要學著讓感受有位置。' },
+  E:  { name:'證明自己的超理智', group:'超理智', color:'#4868b0', light:'#eaf0f9', id:'E', tags:['努力說明能力','補充更多論點','需要被肯定'], posture:'不被理解時，補充更多資料與論點來說明', practice:'「我想被理解的不只是觀點，也包含我的用心。」', trait:'努力說明自己懂、自己有能力、自己是有道理的。', react:'感到不被理解時，會補充更多資料、論點或證明。', need:'被肯定，不必一直證明才值得被聽見。' },
+  F:  { name:'逃避的打岔',     group:'打岔', color:'#3a8f50', light:'#eaf3de', id:'F', tags:['沉默放空','保護模式','遠離現場'], posture:'衝突逼近，身心先切到保護模式', practice:'「我需要休息一下，晚點再回來談。」', trait:'壓力太高時，會沉默、放空、消失或轉移話題。', react:'衝突逼近時，身心會先切到保護模式，讓自己遠離現場。', need:'暫停、喘息，以及可以安全回來的時間。' },
+  G:  { name:'事緩則圓的打岔', group:'打岔', color:'#2a8f78', light:'#e1f5ee', id:'G', tags:['幽默轉場','緩衝降溫','彈性優先'], posture:'氣氛緊張時，用玩笑或轉向話題來降溫', practice:'「我想先緩一下，但這件事我願意回來談。」', trait:'擅長緩衝、幽默、繞一下，先讓場面不要爆掉。', react:'氣氛緊張時，會用玩笑或轉向其他話題來降溫。', need:'保留彈性，也需要在降溫後回到重點。' },
+  H:  { name:'人我兼顧的一致', group:'一致', color:'#6845a0', light:'#eeedfe', id:'H', tags:['同時照顧自他','表達清楚','真實連結'], posture:'衝突時說出感受，也保留理解對方的空間', practice:'「我想說我的感受，也想聽聽你的版本。」', trait:'能同時照顧自己、對方和情境，表達相對清楚。', react:'衝突時會試著說出自己的感受，也保留理解對方的空間。', need:'真實連結，而不是表面和平。' },
+  I:  { name:'反求諸己的一致', group:'一致', color:'#3d6898', light:'#e6edf7', id:'I', tags:['先回看自己','願意調整','重視修復'], posture:'不滿時，先想自己能多理解多承擔一點', practice:'「我可以調整，也希望我們一起承擔。」', trait:'習慣先回看自己，願意調整，也重視關係中的修復。', react:'遇到不滿時，會先想自己能不能多理解、多承擔一點。', need:'雙向負責，而不是只有自己一直修正。' },
+};
+const AXES = ['A 弱勢討好','B 顧關係討好','C 指責','D 唯理超理智','E 證明超理智','F 逃避打岔','G 事緩打岔','H 人我一致','I 反求一致'];
+
+function getParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    maxAxis: p.get('maxAxis') || 'H',
+    scores: (p.get('scores') || '9,9,9,9,9,9,9,9,9').split(',').map(Number),
+  };
+}
+
+function render() {
+  const { maxAxis, scores } = getParams();
+  const t = TYPE_DATA[maxAxis] || TYPE_DATA['H'];
+
+  document.getElementById('shareCard').style.background = t.color;
+  document.getElementById('cardName').textContent = t.name;
+  document.getElementById('cardPosture').textContent = '核心姿態：' + t.posture;
+  document.getElementById('cardPractice').textContent = t.practice;
+
+  const tagsEl = document.getElementById('cardTags');
+  tagsEl.innerHTML = t.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+  const badge = document.getElementById('detailBadge');
+  badge.textContent = t.id;
+  badge.style.background = t.light;
+  badge.style.color = t.color;
+
+  document.getElementById('detailTitle').textContent = t.name;
+  document.getElementById('detailSub').textContent = t.group + '大類 · 向度 ' + t.id;
+  document.getElementById('detailTrait').textContent = t.trait;
+  document.getElementById('detailReact').textContent = t.react;
+  document.getElementById('detailNeed').textContent = t.need;
+
+  const maxScore = Math.max(...scores);
+  const bars = document.getElementById('barRows');
+  bars.innerHTML = scores.map((s, i) => {
+    const isHl = s === maxScore;
+    const pct = Math.round((s / 15) * 100);
+    const fillColor = isHl ? t.color : (s >= 10 ? '#b5d4f4' : '#d3d1c7');
+    return `
+      <div class="bar-row">
+        <div class="bar-label${isHl?' hl':''}">${AXES[i]}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+        <div class="bar-num${isHl?' hl':''}" style="${isHl?'color:'+t.color:''}">${s}</div>
+      </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>

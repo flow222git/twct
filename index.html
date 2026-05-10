@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>練息場 · 你怎麼跟人溝通？</title>
+<style>
+:root {
+  --blue: #2b7de9;
+  --blue-dark: #1a5fc7;
+  --blue-light: #e8f1fd;
+  --blue-mid: #d0e4fa;
+  --yellow: #f5c842;
+  --green: #4caf7d;
+  --text: #1d1d1f;
+  --text2: #6e6e73;
+  --text3: #aeaeb2;
+  --bg: #ffffff;
+  --bg2: #f5f5f7;
+  --border: rgba(0,0,0,0.08);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logo-mark {
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-box {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--blue); color: white;
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+.logo-sub { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; }
+.nav-cta {
+  font-size: 14px; font-weight: 600; color: var(--blue);
+  background: var(--blue-light); border: none; border-radius: 100px;
+  padding: 8px 18px; cursor: pointer; transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--blue-mid); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: var(--blue);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 120px 32px 80px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -120px; right: -120px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -80px;
+  width: 360px; height: 360px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero-eyebrow {
+  font-size: 12px; letter-spacing: 0.14em; font-weight: 600;
+  color: rgba(255,255,255,0.6); text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-title {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 700; letter-spacing: -2.5px; line-height: 1.08;
+  color: white; margin-bottom: 20px;
+}
+.hero-title span {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border-radius: 8px; padding: 0 10px;
+}
+.hero-desc {
+  font-size: clamp(15px, 2vw, 18px);
+  color: rgba(255,255,255,0.8); line-height: 1.7;
+  max-width: 500px; margin-bottom: 40px;
+}
+.hero-stats {
+  display: flex; gap: 32px; margin-bottom: 48px;
+  flex-wrap: wrap; justify-content: center;
+}
+.stat { text-align: center; }
+.stat-num { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: white; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+.hero-cta {
+  background: white; color: var(--blue);
+  font-size: 16px; font-weight: 700;
+  padding: 16px 40px; border-radius: 100px;
+  border: none; cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: -0.3px;
+}
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.16); }
+
+/* SECTION WRAPPER */
+.section {
+  max-width: 640px; margin: 0 auto;
+  padding: 72px 24px;
+}
+.section-title {
+  font-size: 28px; font-weight: 700; letter-spacing: -1px;
+  margin-bottom: 8px; color: var(--text);
+}
+.section-sub { font-size: 15px; color: var(--text2); line-height: 1.6; margin-bottom: 32px; }
+
+/* FORM */
+.form-card {
+  background: var(--bg2); border-radius: 20px;
+  padding: 32px; margin-bottom: 40px;
+}
+.field { margin-bottom: 18px; }
+.field label {
+  display: block; font-size: 13px; font-weight: 600;
+  color: var(--text2); margin-bottom: 8px; letter-spacing: 0.03em;
+}
+.field input {
+  width: 100%; padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px; color: var(--text);
+  background: white; outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.field input:focus { border-color: var(--blue); }
+.field-hint { font-size: 12px; color: var(--text3); margin-top: 5px; }
+.required { color: var(--blue); }
+
+/* PROGRESS */
+.progress-wrap {
+  margin-bottom: 32px; display: none;
+}
+.progress-info {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.progress-label { font-size: 13px; font-weight: 600; color: var(--text2); }
+.progress-count { font-size: 13px; color: var(--blue); font-weight: 700; }
+.progress-track {
+  height: 6px; background: var(--bg2); border-radius: 100px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--blue);
+  border-radius: 100px; transition: width 0.4s ease;
+}
+.stage-label {
+  font-size: 11px; color: var(--text3); margin-top: 8px;
+  display: flex; gap: 6px; align-items: center;
+}
+.stage-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue-mid); display: inline-block;
+  transition: background 0.3s;
+}
+.stage-dot.done { background: var(--blue); }
+.stage-dot.active { background: var(--blue); box-shadow: 0 0 0 2px var(--blue-light); }
+
+/* QUESTIONS */
+.q-block {
+  margin-bottom: 28px;
+  background: white; border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.q-block:hover { border-color: var(--blue-mid); }
+.q-block.answered { border-color: var(--blue); background: #fafcff; }
+.q-num { font-size: 11px; color: var(--blue); font-weight: 700; letter-spacing: 0.06em; margin-bottom: 10px; }
+.q-text { font-size: 16px; font-weight: 500; line-height: 1.6; color: var(--text); margin-bottom: 18px; }
+.scale-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.scale-labels {
+  display: flex; justify-content: space-between;
+  margin-top: 8px;
+}
+.scale-label-text { font-size: 11px; color: var(--text3); }
+.scale-btn {
+  flex: 1; min-width: 40px; max-width: 60px;
+  padding: 10px 0; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); background: white;
+  font-size: 15px; font-weight: 600; color: var(--text2);
+  cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.scale-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+.scale-btn.selected { border-color: var(--blue); background: var(--blue); color: white; }
+
+/* STAGE TRANSITION */
+.stage-cheer {
+  display: none;
+  background: var(--blue); color: white;
+  border-radius: 20px; padding: 28px 32px;
+  text-align: center; margin-bottom: 28px;
+}
+.cheer-emoji { font-size: 36px; margin-bottom: 12px; }
+.cheer-title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+.cheer-sub { font-size: 14px; opacity: 0.82; line-height: 1.6; }
+
+/* SUBMIT */
+.submit-btn {
+  width: 100%; padding: 16px;
+  background: var(--blue); color: white;
+  font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+  border: none; border-radius: 100px;
+  cursor: pointer; transition: all 0.2s;
+  display: none;
+}
+.submit-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.start-quiz-btn {
+  width: 100%; padding: 15px;
+  background: var(--blue); color: white;
+  font-size: 15px; font-weight: 700;
+  border: none; border-radius: 100px;
+  cursor: pointer; transition: all 0.2s; margin-top: 4px;
+}
+.start-quiz-btn:hover { background: var(--blue-dark); }
+.error-msg { font-size: 13px; color: #e85050; margin-top: 10px; display: none; }
+
+/* FOOTER */
+footer {
+  background: var(--bg2); border-top: 1px solid var(--border);
+  padding: 32px; text-align: center;
+}
+.footer-logo { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 10px; }
+.footer-text { font-size: 12px; color: var(--text3); }
+
+/* UTILS */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-mark">
+    <div class="logo-box">練</div>
+    <div>
+      <div class="logo-text">練息場</div>
+      <div class="logo-sub">JOIN TO ENJOY</div>
+    </div>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">開始測驗</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">練息場 · 職場溝通類型測驗</div>
+  <h1 class="hero-title">你怎麼跟<span>別人</span>溝通？</h1>
+  <p class="hero-desc">27 個情境，找出你的溝通姿態。<br>不是要評分，是要讓你更看見自己。</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">種溝通類型</div></div>
+    <div class="stat"><div class="stat-num">27</div><div class="stat-label">道情境題</div></div>
+    <div class="stat"><div class="stat-num">5 分</div><div class="stat-label">完成測驗</div></div>
+  </div>
+  <button class="hero-cta" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">
+    開始測驗 →
+  </button>
+</section>
+
+<!-- QUIZ SECTION -->
+<div class="section" id="quiz-section">
+  <h2 class="section-title">填寫資料</h2>
+  <p class="section-sub">Email 用來儲存你的測驗結果，不會拿來寄廣告。</p>
+
+  <!-- INFO FORM -->
+  <div id="info-form">
+    <div class="form-card">
+      <div class="field">
+        <label>Email <span class="required">*</span></label>
+        <input type="email" id="email" placeholder="your@email.com">
+        <div class="field-hint">必填，用於儲存你的結果</div>
+      </div>
+      <div class="field">
+        <label>暱稱（選填）</label>
+        <input type="text" id="nickname" placeholder="你想被叫什麼？">
+      </div>
+    </div>
+    <button class="start-quiz-btn" onclick="startQuiz()">好，開始測驗 →</button>
+    <div class="error-msg" id="email-error">請輸入有效的 Email 地址</div>
+  </div>
+
+  <!-- QUIZ BODY -->
+  <div id="quiz-body" class="hidden">
+    <div class="progress-wrap" id="progress-wrap" style="display:block">
+      <div class="progress-info">
+        <span class="progress-label" id="stage-name">第一段：感受篇</span>
+        <span class="progress-count" id="q-count">0 / 27</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="stage-label">
+        <span class="stage-dot active" id="dot-1"></span>
+        <span style="font-size:11px;color:var(--text3)">感受篇</span>
+        <span class="stage-dot" id="dot-2"></span>
+        <span style="font-size:11px;color:var(--text3)">行為篇</span>
+        <span class="stage-dot" id="dot-3"></span>
+        <span style="font-size:11px;color:var(--text3)">深層篇</span>
+      </div>
+    </div>
+
+    <div id="stage-cheer-1" class="stage-cheer">
+      <div class="cheer-emoji">🎉</div>
+      <div class="cheer-title">第一段完成！</div>
+      <div class="cheer-sub">你已經回答了 9 題。<br>接下來是行為篇，繼續看你怎麼反應。</div>
+    </div>
+    <div id="stage-cheer-2" class="stage-cheer">
+      <div class="cheer-emoji">💪</div>
+      <div class="cheer-title">快到了！</div>
+      <div class="cheer-sub">最後 9 題，是最有深度的問題。<br>慢慢感受，誠實作答就好。</div>
+    </div>
+
+    <div id="questions-wrap"></div>
+    <button class="submit-btn" id="submit-btn" onclick="submitQuiz()">看我的溝通類型 →</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">
+    <div class="logo-box" style="width:24px;height:24px;font-size:11px">練</div>
+    <span style="font-size:13px;font-weight:600;color:var(--text2)">練息場 Join to Enjoy</span>
+  </div>
+  <div class="footer-text">© 2026 練息場 · 測驗題目改編自薩提爾溝通模式研究</div>
+</footer>
+
+<script>
+const QUESTIONS = [
+  // Stage 1: 感受篇 (Q1-Q9)
+  { axis:'A', text:'遇到意見不合時，我很快就覺得是自己哪裡不對。' },
+  { axis:'B', text:'就算我有不同意見，也會先想想說出來會不會傷害關係。' },
+  { axis:'C', text:'別人犯錯時，我很難忍住不說。' },
+  { axis:'D', text:'有情緒衝突時，我傾向先釐清事實，再討論感受。' },
+  { axis:'E', text:'我常常覺得需要解釋清楚，對方才能真的理解我。' },
+  { axis:'F', text:'氣氛緊繃時，我會想離開現場，讓自己冷靜。' },
+  { axis:'G', text:'我會用玩笑或轉移話題來讓緊張的場面緩和下來。' },
+  { axis:'H', text:'我可以說出自己的感受，也同時照顧到對方的狀態。' },
+  { axis:'I', text:'發生衝突後，我會先反省自己有沒有哪裡做得不夠好。' },
+  // Stage 2: 行為篇 (Q10-Q18)
+  { axis:'A', text:'被要求做某件事時，就算不願意，我通常還是會答應。' },
+  { axis:'B', text:'我不喜歡讓場面僵住，所以會主動找方法緩和。' },
+  { axis:'C', text:'如果我認為自己是對的，我會堅持到對方接受為止。' },
+  { axis:'D', text:'討論問題時，我習慣用數據或邏輯來說明立場。' },
+  { axis:'E', text:'我說話時會多補充細節，確保對方完整理解我的意思。' },
+  { axis:'F', text:'面對壓力時，我有時會拖延或迴避，而不是直接面對。' },
+  { axis:'G', text:'我會先讓場面不爆炸，之後再找時機回到正題。' },
+  { axis:'H', text:'表達自己需求時，我也會顧慮對方的感受與處境。' },
+  { axis:'I', text:'我傾向先承擔多一點，再看情況調整。' },
+  // Stage 3: 深層篇 (Q19-Q27)
+  { axis:'A', text:'我很怕讓別人失望，所以常常把自己的需求放到最後。' },
+  { axis:'B', text:'我希望大家都好，就算要委屈自己也沒關係。' },
+  { axis:'C', text:'我覺得對的事情就應該說清楚，不用太在意別人的感受。' },
+  { axis:'D', text:'情緒化的反應讓我很不舒服，我比較喜歡理性討論。' },
+  { axis:'E', text:'被誤解時，我會用更多說明來讓對方真正懂我。' },
+  { axis:'F', text:'壓力太大時，我需要完全切斷一段時間，才能恢復。' },
+  { axis:'G', text:'我擅長讓僵局暫時鬆動，讓大家有喘息的空間。' },
+  { axis:'H', text:'我相信說清楚比委屈自己或硬碰硬都更能解決問題。' },
+  { axis:'I', text:'關係出問題時，我會先想自己能做什麼，再期待對方改變。' },
+];
+
+const AXIS_MAP = { A:0, B:1, C:2, D:3, E:4, F:5, G:6, H:7, I:8 };
+const STAGES = [
+  { label:'第一段：感受篇', range:[0,9] },
+  { label:'第二段：行為篇', range:[9,18] },
+  { label:'第三段：深層篇', range:[18,27] },
+];
+const STAGE_CHEERS = [null, 'stage-cheer-1', 'stage-cheer-2'];
+
+let answers = new Array(27).fill(0);
+let answeredCount = 0;
+let currentStage = 0;
+
+function startQuiz() {
+  const email = document.getElementById('email').value.trim();
+  const emailErr = document.getElementById('email-error');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    emailErr.style.display = 'block';
+    return;
+  }
+  emailErr.style.display = 'none';
+  document.getElementById('info-form').classList.add('hidden');
+  document.getElementById('quiz-body').classList.remove('hidden');
+  renderQuestions();
+  updateProgress();
+}
+
+function renderQuestions() {
+  const wrap = document.getElementById('questions-wrap');
+  wrap.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-block';
+    div.id = 'q-' + i;
+    div.innerHTML = `
+      <div class="q-num">Q${i+1} · ${getAxisLabel(q.axis)}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="scale-row">
+        ${[1,2,3,4,5].map(v => `<button class="scale-btn" onclick="selectAnswer(${i},${v},this)">${v}</button>`).join('')}
+      </div>
+      <div class="scale-labels">
+        <span class="scale-label-text">完全不像我</span>
+        <span class="scale-label-text">非常像我</span>
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function getAxisLabel(axis) {
+  const labels = { A:'討好', B:'討好', C:'指責', D:'超理智', E:'超理智', F:'打岔', G:'打岔', H:'一致', I:'一致' };
+  return labels[axis] || axis;
+}
+
+function selectAnswer(qIdx, val, btn) {
+  const wasAnswered = answers[qIdx] !== 0;
+  answers[qIdx] = val;
+
+  const block = document.getElementById('q-' + qIdx);
+  block.classList.add('answered');
+  block.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  if (!wasAnswered) {
+    answeredCount++;
+    updateProgress();
+    checkStageComplete(qIdx);
+  }
+}
+
+function checkStageComplete(qIdx) {
+  if (qIdx === 8 && currentStage === 0) {
+    currentStage = 1;
+    showCheer('stage-cheer-1');
+    updateStageDots();
+  } else if (qIdx === 17 && currentStage === 1) {
+    currentStage = 2;
+    showCheer('stage-cheer-2');
+    updateStageDots();
+  }
+  if (answeredCount === 27) {
+    document.getElementById('submit-btn').style.display = 'block';
+  }
+}
+
+function showCheer(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+}
+
+function updateStageDots() {
+  document.querySelectorAll('.stage-dot').forEach((d,i) => {
+    d.classList.remove('active','done');
+    if (i < currentStage) d.classList.add('done');
+    else if (i === currentStage) d.classList.add('active');
+  });
+  const names = ['第一段：感受篇','第二段：行為篇','第三段：深層篇'];
+  document.getElementById('stage-name').textContent = names[currentStage] || '完成！';
+}
+
+function updateProgress() {
+  const pct = Math.round((answeredCount / 27) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-count').textContent = answeredCount + ' / 27';
+}
+
+function submitQuiz() {
+  if (answeredCount < 27) return;
+
+  const scores = new Array(9).fill(0);
+  QUESTIONS.forEach((q, i) => {
+    scores[AXIS_MAP[q.axis]] += answers[i];
+  });
+
+  // C 拆分: Q12 (idx=11) vs Q21 (idx=20), both are axis C
+  const q12 = answers[11]; const q21 = answers[20];
+  let cType = q12 > q21 ? 'C1' : (q21 > q12 ? 'C2' : 'C');
+
+  // 找主類型
+  const axisKeys = ['A','B','C','D','E','F','G','H','I'];
+  let maxScore = 0; let maxAxis = 'H';
+  scores.forEach((s, i) => { if (s > maxScore) { maxScore = s; maxAxis = axisKeys[i]; } });
+  if (maxAxis === 'C') maxAxis = cType;
+
+  // 儲存並跳轉
+  const email = document.getElementById('email').value.trim();
+  const nickname = document.getElementById('nickname').value.trim();
+  const params = new URLSearchParams({
+    email, nickname, maxAxis, maxScore,
+    scores: scores.join(','),
+    answers: answers.join(',')
+  });
+
+  // 送出到後端（若本機運行）
+  fetch('/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, nickname, maxAxis, maxScore, scores, answers })
+  }).catch(() => {});
+
+  window.location.href = 'result.html?' + params.toString();
+}
+</script>
+</body>
+</html>
