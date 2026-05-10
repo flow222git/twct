@@ -292,7 +292,7 @@ footer {
       <div class="field">
         <label>Email <span class="required">*</span></label>
         <input type="email" id="email" placeholder="your@email.com">
-        <div class="field-hint">必填，用於儲存你的結果</div>
+
       </div>
       <div class="field">
         <label>暱稱（選填）</label>
@@ -307,31 +307,12 @@ footer {
   <div id="quiz-body" class="hidden">
     <div class="progress-wrap" id="progress-wrap" style="display:block">
       <div class="progress-info">
-        <span class="progress-label" id="stage-name">第一段：感受篇</span>
+        <span class="progress-label">作答進度</span>
         <span class="progress-count" id="q-count">0 / 27</span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" id="progress-fill" style="width:0%"></div>
       </div>
-      <div class="stage-label">
-        <span class="stage-dot active" id="dot-1"></span>
-        <span style="font-size:11px;color:var(--text3)">感受篇</span>
-        <span class="stage-dot" id="dot-2"></span>
-        <span style="font-size:11px;color:var(--text3)">行為篇</span>
-        <span class="stage-dot" id="dot-3"></span>
-        <span style="font-size:11px;color:var(--text3)">深層篇</span>
-      </div>
-    </div>
-
-    <div id="stage-cheer-1" class="stage-cheer">
-      <div class="cheer-emoji">🎉</div>
-      <div class="cheer-title">第一段完成！</div>
-      <div class="cheer-sub">你已經回答了 9 題。<br>接下來是行為篇，繼續看你怎麼反應。</div>
-    </div>
-    <div id="stage-cheer-2" class="stage-cheer">
-      <div class="cheer-emoji">💪</div>
-      <div class="cheer-title">快到了！</div>
-      <div class="cheer-sub">最後 9 題，是最有深度的問題。<br>慢慢感受，誠實作答就好。</div>
     </div>
 
     <div id="questions-wrap"></div>
@@ -415,7 +396,7 @@ function renderQuestions() {
     div.className = 'q-block';
     div.id = 'q-' + i;
     div.innerHTML = `
-      <div class="q-num">Q${i+1} · ${getAxisLabel(q.axis)}</div>
+      <div class="q-num">Q${i+1}</div>
       <div class="q-text">${q.text}</div>
       <div class="scale-row">
         ${[1,2,3,4,5].map(v => `<button class="scale-btn" onclick="selectAnswer(${i},${v},this)">${v}</button>`).join('')}
@@ -446,38 +427,10 @@ function selectAnswer(qIdx, val, btn) {
   if (!wasAnswered) {
     answeredCount++;
     updateProgress();
-    checkStageComplete(qIdx);
-  }
-}
-
-function checkStageComplete(qIdx) {
-  if (qIdx === 8 && currentStage === 0) {
-    currentStage = 1;
-    showCheer('stage-cheer-1');
-    updateStageDots();
-  } else if (qIdx === 17 && currentStage === 1) {
-    currentStage = 2;
-    showCheer('stage-cheer-2');
-    updateStageDots();
   }
   if (answeredCount === 27) {
     document.getElementById('submit-btn').style.display = 'block';
   }
-}
-
-function showCheer(id) {
-  const el = document.getElementById(id);
-  if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior:'smooth', block:'center' }); }
-}
-
-function updateStageDots() {
-  document.querySelectorAll('.stage-dot').forEach((d,i) => {
-    d.classList.remove('active','done');
-    if (i < currentStage) d.classList.add('done');
-    else if (i === currentStage) d.classList.add('active');
-  });
-  const names = ['第一段：感受篇','第二段：行為篇','第三段：深層篇'];
-  document.getElementById('stage-name').textContent = names[currentStage] || '完成！';
 }
 
 function updateProgress() {
