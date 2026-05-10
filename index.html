@@ -467,11 +467,6 @@ function submitQuiz() {
   });
 
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbz4YJ6eNKFSKaXpmlwVd4SBbYubgiDhYYDCRBKycovE5ocI9y_o0jowD20FaW-Pmz2K/exec';
-  const params = new URLSearchParams({
-    email, nickname, maxAxis, maxScore,
-    scores: scores.join(','),
-    answers: answers.join(',')
-  });
   fetch(GAS_URL + '?' + params.toString(), { mode: 'no-cors' }).catch(() => {});
 
   window.location.href = 'result.html?' + params.toString();
