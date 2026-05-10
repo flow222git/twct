@@ -466,9 +466,10 @@ function submitQuiz() {
     answers: answers.join(',')
   });
 
-  // 送出到後端（若本機運行）
-  fetch('/submit', {
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzw1OzR1YqaynAJstPmoeihIw_pxLkdDnQq22VlcUlo0tArG_5Y8Am3jdzHU7Rc5NCtQg/exec';
+  fetch(GAS_URL, {
     method: 'POST',
+    mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, nickname, maxAxis, maxScore, scores, answers })
   }).catch(() => {});
