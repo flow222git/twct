@@ -466,13 +466,24 @@ function submitQuiz() {
     answers: answers.join(',')
   });
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbyrz4mSxo2D8ti5YpMOV7P9LINwBpYIPMovvv4syquQ-JyanR48hD-zF0Ys9_fN_ouw/exec';
-  fetch(GAS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, nickname, maxAxis, maxScore, scores, answers })
-  }).catch(() => {});
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwGQ5wIpfh6DhK-yKSKZi5StF6JH1i5LAmtRyhSxkHz7LKvRUDlMib1A3MgS4h_uvHr/exec';
+  const payload = JSON.stringify({ email, nickname, maxAxis, maxScore, scores, answers });
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = GAS_URL;
+  form.target = 'hidden_iframe';
+  form.style.display = 'none';
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'data';
+  input.value = payload;
+  form.appendChild(input);
+  const iframe = document.createElement('iframe');
+  iframe.name = 'hidden_iframe';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  document.body.appendChild(form);
+  form.submit();
 
   window.location.href = 'result.html?' + params.toString();
 }
