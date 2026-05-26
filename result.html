@@ -232,6 +232,64 @@ function render() {
 }
 
 render();
+
+// ── JTE WRITEBACK ──
+(function(){
+  try {
+    var p=new URLSearchParams(window.location.search);
+    var maxAxis=p.get('maxAxis')||'H';
+    var email=p.get('email')||'';
+    var nickname=p.get('nickname')||'';
+    var maxScore=parseInt(p.get('maxScore')||'0');
+
+    // 取類型名稱
+    var TYPE_NAMES={
+      'A':'弱勢的討好','B':'顧及關係的討好',
+      'C1':'威權的指責','C2':'護顏的指責','C1+C2':'雙重指責',
+      'D':'唯理至上的超理智','E':'證明自己的超理智',
+      'F':'逃避的打岔','G':'事緩則圓的打岔',
+      'H':'人我兼顧的一致','I':'存在感的一致'
+    };
+    var typeName=TYPE_NAMES[maxAxis]||maxAxis;
+
+    // 找 localStorage key
+    var jteKey='jte_daily_v1';
+    if(email){
+      // 嘗試用 email 找對應的 key
+      var storedEmail=localStorage.getItem('jte_user_email');
+      if(storedEmail){
+        jteKey='jte_daily_'+storedEmail.replace(/[^a-zA-Z0-9]/g,'_');
+      }
+    }
+
+    var today=new Date();
+    var dateKey=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+    var all=JSON.parse(localStorage.getItem(jteKey)||'{}');
+    var rec=all[dateKey]||{moods:[],energy:5,note:'',tags:[],linked:[],createdAt:new Date().toISOString()};
+    if(!rec.linked) rec.linked=[];
+
+    // 避免重複（同一天同類型只記一次）
+    var exists=rec.linked.some(function(l){return l.source==='TWCT'&&l.type===maxAxis;});
+    if(!exists){
+      rec.linked.push({
+        source:'TWCT',
+        recordId:'twct-'+Date.now(),
+        measureDate:dateKey,
+        type:maxAxis,
+        typeName:typeName,
+        score:maxScore,
+        email:email,
+        nickname:nickname,
+        completedAt:new Date().toISOString()
+      });
+      rec.updatedAt=new Date().toISOString();
+      all[dateKey]=rec;
+      localStorage.setItem(jteKey,JSON.stringify(all));
+      console.log('JTE writeback: TWCT',typeName);
+    }
+  } catch(e){ console.warn('JTE TWCT writeback failed',e); }
+})();
+
 </script>
 </body>
 </html>
